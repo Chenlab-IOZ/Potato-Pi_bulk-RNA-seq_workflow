@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - r-base=4.5
+  - bioconductor-deseq2
+  - bioconductor-edger
+  - r-ggplot2=3.5
+  - r-ggrepel=0.9
+  - r-pheatmap=1.0

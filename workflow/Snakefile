@@ -1,0 +1,153 @@
+import csv
+from pathlib import Path
+
+from snakemake.exceptions import WorkflowError
+
+
+configfile: str(Path(workflow.basedir) / "config" / "config.yaml")
+
+
+WORKFLOW_DIR = Path(workflow.basedir).resolve()
+SCRIPT_PATH = str(WORKFLOW_DIR / "scripts")
+
+
+def resolve_workflow_path(path):
+    resolved_path = Path(path)
+    if not resolved_path.is_absolute():
+        resolved_path = WORKFLOW_DIR / resolved_path
+    return resolved_path.resolve()
+
+
+SAMPLE_FILE = resolve_workflow_path(config["samples"])
+WORK_DIR = str(resolve_workflow_path(config["output_dir"]))
+STU_NUCLEAR_BAM_DIR = str(
+    resolve_workflow_path(config["quantification"]["stu_bam_dir"])
+)
+MULTIQC_FILENAME = config["multiqc"]["filename"]
+RRNA_REFERENCE = resolve_workflow_path(config["sortmerna"]["reference"])
+SORTMERNA_INDEX_DIR = (
+    WORK_DIR + "/00.reference/sortmerna_index/idx"
+)
+COMBINED_GENOME = resolve_workflow_path(config["reference"]["combined_genome"])
+STU_GENE_BED = resolve_workflow_path(config["reference"]["stu_gene_bed"])
+STU_GFF3 = resolve_workflow_path(config["reference"]["stu_gff3"])
+PI_GTF = resolve_workflow_path(config["reference"]["pi_gtf"])
+COMBINED_GENE_BED = WORK_DIR + "/00.reference/combined_genes.bed"
+STU_NUCLEAR_GTF = WORK_DIR + "/00.reference/stu_nuclear.gtf"
+HISAT2_INDEX_PREFIX = WORK_DIR + "/00.reference/hisat2_index/Stu_Pi"
+HISAT2_INDEX_FILES = [
+    f"{HISAT2_INDEX_PREFIX}.{index}.ht2"
+    for index in range(1, 9)
+]
+
+REFERENCE_FILES = {
+    "SortMeRNA reference": RRNA_REFERENCE,
+    "combined genome": COMBINED_GENOME,
+    "Stu gene BED": STU_GENE_BED,
+    "Stu GFF3": STU_GFF3,
+    "Pi GTF": PI_GTF,
+}
+
+for reference_name, reference_path in REFERENCE_FILES.items():
+    if not reference_path.is_file():
+        raise WorkflowError(
+            f"{reference_name} does not exist: {reference_path}"
+        )
+
+RRNA_REFERENCE = str(RRNA_REFERENCE)
+COMBINED_GENOME = str(COMBINED_GENOME)
+STU_GENE_BED = str(STU_GENE_BED)
+STU_GFF3 = str(STU_GFF3)
+PI_GTF = str(PI_GTF)
+
+REQUIRED_SAMPLE_COLUMNS = {
+    "sample",
+    "condition",
+    "replicate",
+    "batch",
+    "r1",
+    "r2",
+}
+
+
+def resolve_fastq(path):
+    fastq = Path(path)
+    if not fastq.is_absolute():
+        fastq = SAMPLE_FILE.parent / fastq
+    return str(fastq.resolve())
+
+
+if not SAMPLE_FILE.is_file():
+    raise WorkflowError(f"Sample sheet does not exist: {SAMPLE_FILE}")
+
+with SAMPLE_FILE.open(newline="") as handle:
+    reader = csv.DictReader(handle, delimiter="\t")
+    if reader.fieldnames is None:
+        raise WorkflowError(f"Sample sheet has no header: {SAMPLE_FILE}")
+
+    missing_columns = REQUIRED_SAMPLE_COLUMNS - set(reader.fieldnames)
+    if missing_columns:
+        raise WorkflowError(
+            "Sample sheet is missing required columns: "
+            + ", ".join(sorted(missing_columns))
+        )
+
+    SAMPLE_TABLE = {}
+    for line_number, row in enumerate(reader, start=2):
+        empty_columns = [
+            column
+            for column in REQUIRED_SAMPLE_COLUMNS
+            if not row[column].strip()
+        ]
+        if empty_columns:
+            raise WorkflowError(
+                f"Sample sheet line {line_number} has empty values: "
+                + ", ".join(sorted(empty_columns))
+            )
+
+        sample = row["sample"].strip()
+        if sample in SAMPLE_TABLE:
+            raise WorkflowError(f"Duplicate sample in sample sheet: {sample}")
+
+        row = {key: value.strip() for key, value in row.items()}
+        row["r1"] = resolve_fastq(row["r1"])
+        row["r2"] = resolve_fastq(row["r2"])
+
+        missing_fastqs = [
+            path for path in (row["r1"], row["r2"])
+            if not Path(path).is_file()
+        ]
+        if missing_fastqs:
+            raise WorkflowError(
+                f"FASTQ file(s) for sample {sample} do not exist: "
+                + ", ".join(missing_fastqs)
+            )
+
+        SAMPLE_TABLE[sample] = row
+
+if not SAMPLE_TABLE:
+    raise WorkflowError(f"Sample sheet contains no samples: {SAMPLE_FILE}")
+
+SAMPLES = list(SAMPLE_TABLE)
+
+
+def sample_fastq(wildcards, read):
+    return SAMPLE_TABLE[wildcards.sample][read]
+
+include: "rules/fastp.smk"
+include: "rules/rrna_filtering.smk"
+include: "rules/strand_analysis.smk"
+include: "rules/alignment.smk"
+include: "rules/quantification.smk"
+include: "rules/sample_relationship.smk"
+include: "rules/multiqc.smk"
+
+
+rule all:
+    input:
+        WORK_DIR + f"/02.pre_assesment/01.multiQC/{MULTIQC_FILENAME}.html",
+        WORK_DIR + "/02.pre_assesment/02.strandness/strandness_summary.tsv",
+        WORK_DIR + "/02.pre_assesment/03.mapping/mapping_composition.tsv",
+        WORK_DIR + "/03.expression/matrices/gene_tpm.tsv",
+        WORK_DIR + "/03.expression/matrices/gene_readcount.tsv",
+        SAMPLE_RELATIONSHIP_OUTPUTS

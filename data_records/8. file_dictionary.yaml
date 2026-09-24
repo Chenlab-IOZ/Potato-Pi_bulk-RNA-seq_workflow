@@ -1,0 +1,192 @@
+# Column numbers are 1-based positions in the original TSV files.
+# "NA" indicates information that is not assigned or not applicable, depending on the field.
+
+- file: "1. sample_metadata.tsv"
+  columns:
+    - column: 1
+      name: sample_id
+      description: "Unique internal sample identifier used consistently across the deposited processed-data files."
+    - column: 2
+      name: biological_replicate
+      description: "Biological replicate number within each sampling condition."
+    - column: 3
+      name: treatment
+      description: "Experimental treatment assigned to the sample."
+    - column: 4
+      name: time_h
+      description: "Sampling time in hours; 0 denotes the water-treated mock baseline, and positive values denote hours after P. infestans inoculation."
+    - column: 5
+      name: organism
+      description: "Host organism from which the RNA sample was collected."
+    - column: 6
+      name: cultivar
+      description: "Potato cultivar used in the experiment."
+    - column: 7
+      name: tissue
+      description: "Plant tissue used for RNA extraction."
+    - column: 8
+      name: leaf_position
+      description: "Position of the leaves collected for the sample."
+    - column: 9
+      name: plants_per_sample
+      description: "Number of individual plants contributing tissue to one biological replicate."
+    - column: 10
+      name: bottles_per_sample
+      description: "Number of tissue-culture bottles from which plants were sampled for one biological replicate."
+    - column: 11
+      name: leaves_per_sample
+      description: "Total number of leaves pooled to generate one biological replicate."
+    - column: 12
+      name: plant_age_at_treatment_days
+      description: "Plant age in days at the time of treatment, counted from transfer of stem segments onto fresh culture medium."
+    - column: 13
+      name: developmental_stage
+      description: "Developmental stage of the plants at treatment."
+    - column: 14
+      name: treatment_batch
+      description: "Experimental treatment-batch identifier."
+    - column: 15
+      name: bioproject_accession
+      description: "BioProject accession associated with the sequencing dataset."
+    - column: 16
+      name: gsa_accession
+      description: "Genome Sequence Archive accession associated with the sequencing dataset."
+    - column: 17
+      name: biosample_accession
+      description: "Repository BioSample accession associated with the sample."
+    - column: 18
+      name: experiment_accession
+      description: "Repository experiment accession associated with the sequencing library."
+    - column: 19
+      name: run_accession
+      description: "Repository sequencing-run accession associated with the library."
+    - column: 20
+      name: instrument_model
+      description: "Sequencing instrument model used to generate the raw reads."
+    - column: 21
+      name: library_layout
+      description: "Sequencing-library layout."
+    - column: 22
+      name: read_length_bp
+      description: "Nominal read length in base pairs for each end of the paired-end sequencing run."
+    - column: 23
+      name: library_strandedness
+      description: "Strand orientation of the RNA-seq library."
+    - column: 24
+      name: run_data_file_type
+      description: "File format of the raw sequencing data."
+    - column: 25
+      name: fastq_r1
+      description: "Filename of the read-1 FASTQ file associated with the sequencing library."
+    - column: 26
+      name: fastq_r2
+      description: "Filename of the read-2 FASTQ file associated with the sequencing library."
+    - column: 27
+      name: sample_title
+      description: "Concise sample title used for repository metadata."
+    - column: 28
+      name: sample_description
+      description: "Human-readable description of the biological sample, treatment, sampling time and replicate."
+    - column: 29
+      name: growth_protocol
+      description: "Brief description of the plant growth conditions before treatment."
+    - column: 30
+      name: application_method
+      description: "Method used to apply the mock treatment or P. infestans inoculum."
+    - column: 31
+      name: inoculum_concentration
+      description: "Concentration of the P. infestans inoculum; 0 is used for the water-treated mock samples."
+  rows: "Each data row represents one RNA-seq library and its corresponding biological replicate. The table contains 27 libraries from nine sampling conditions, with three biological replicates per condition."
+
+- file: "2. potato_gene_raw_counts.tsv"
+  columns: "The first column, gene_id, contains potato gene identifiers. Each remaining column represents one sample, named by sample_id, and contains unnormalized fragment counts assigned to genes by featureCounts."
+  rows: "Each data row represents one potato nuclear gene; all 40,336 genes are included, including genes with zero counts across all samples."
+
+- file: "3. potato_gene_TPM.tsv"
+  columns: "The first column, gene_id, contains potato gene identifiers. Each remaining column represents one sample, named by sample_id, and contains gene-level TPM (transcripts per million) values estimated by StringTie."
+  rows: "Each data row represents one potato nuclear gene; all 40,336 genes are included."
+
+- file: "4. potato_gene_log2CPM.tsv"
+  columns: "The first column, gene_id, contains potato gene identifiers. Each remaining column represents one sample, named by sample_id, and contains log2 counts per million calculated with edgeR after TMM normalization, using cpm(log = TRUE, prior.count = 2)."
+  rows: "Each data row represents one potato nuclear gene with a summed raw count > 10 across all 27 samples; 24,858 genes are retained."
+
+# All fractions range from 0 to 1; multiply by 100 to obtain percentages.
+- file: "5. library_qc_metrics.tsv"
+  columns:
+    - column: 3
+      name: retained_read_pairs
+      description: "retained_read_pairs = rrna_count + non_rrna_read_pairs"
+    - column: 8
+      name: assignment_total_count
+      description: "assignment_total_count = potato_unique_count + potato_organellar_count + pathogen_assigned_count"
+    - column: 9
+      name: potato_unique_count
+      description: "Filtered read pairs uniquely mapped to the potato nuclear genome; excludes chloroplast and mitochondrial alignments."
+    - column: 12
+      name: host_feature_assigned_fragments
+      description: "Fragments assigned to potato nuclear genes by featureCounts; equals the sum of the corresponding sample column in the raw count matrix."
+    - column: 13
+      name: host_detected_genes
+      description: "Number of potato genes with raw count > 0 in the sample."
+    - column: 14
+      name: retention_fraction
+      description: "retention_fraction = retained_read_pairs / raw_read_pairs"
+    - column: 15
+      name: rrna_fraction
+      description: "rrna_fraction = rrna_count / retained_read_pairs"
+    - column: 16
+      name: unmapped_fraction
+      description: "unmapped_fraction = unmapped_count / non_rrna_read_pairs"
+    - column: 17
+      name: multimapped_fraction
+      description: "multimapped_fraction = multimapped_count / non_rrna_read_pairs"
+    - column: 18
+      name: potato_organellar_fraction
+      description: "potato_organellar_fraction = potato_organellar_count / assignment_total_count"
+    - column: 19
+      name: potato_unique_fraction
+      description: "potato_unique_fraction = potato_unique_count / assignment_total_count"
+    - column: 20
+      name: pathogen_assigned_fraction
+      description: "pathogen_assigned_fraction = pathogen_assigned_count / assignment_total_count"
+    - column: 21
+      name: host_feature_assignment_fraction
+      description: "host_feature_assignment_fraction = host_feature_assigned_fragments / potato_unique_count"
+  rows: "Each data row represents one sequencing library, identified by sample_id; 27 libraries are included."
+
+- file: "6. reference_manifest.tsv"
+  columns:
+    - column: 1
+      name: resource_id
+      description: "Short unique identifier assigned to each reference resource within this dataset."
+    - column: 2
+      name: resource_type
+      description: "Type of reference resource, such as a genome sequence, gene annotation or rRNA reference database."
+    - column: 3
+      name: organism
+      description: "Organism represented by the reference resource; 'Multiple taxa' is used for databases containing sequences from multiple taxonomic groups."
+    - column: 4
+      name: resource_name
+      description: "Human-readable name of the reference resource."
+    - column: 5
+      name: accession
+      description: "Public database accession associated with the reference resource, where applicable."
+    - column: 6
+      name: assembly_version
+      description: "Genome assembly version associated with the reference resource, where applicable."
+    - column: 7
+      name: annotation_or_database_release
+      description: "Release or version of the gene annotation or reference database, where applicable."
+    - column: 8
+      name: source_database
+      description: "Public database or resource from which the reference file was obtained."
+    - column: 9
+      name: resource_format
+      description: "File format of the reference resource used in the analysis."
+    - column: 10
+      name: source_url
+      description: "URL of the public source from which the reference resource can be obtained."
+    - column: 11
+      name: notes
+      description: "Additional information needed to identify or interpret the reference resource and its use in the analysis."
+  rows: "Each data row represents one external reference resource used for read preprocessing, competitive alignment or potato gene quantification. Eight reference resources are included."

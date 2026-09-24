@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - python=3.12
+  - samtools=1.23
+  - stringtie=3.0.3
+  - subread=2.1.1

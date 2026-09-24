@@ -1,0 +1,11 @@
+# Intel Core Ultra 7 270K Plus (20 logical CPUs), 70 GiB RAM under WSL.
+# Keep 2 CPUs and about 10 GiB RAM available for Windows/WSL and filesystem cache.
+cores: 18
+resources:
+  mem_mb: 61440
+default-resources:
+  mem_mb: 1024
+use-conda: true
+rerun-incomplete: true
+printshellcmds: true
+

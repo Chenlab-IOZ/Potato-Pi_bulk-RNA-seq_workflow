@@ -1,0 +1,77 @@
+# Paths are resolved relative to the workflow directory.
+samples: "config/sample.tsv"
+output_dir: "../../04_results"
+
+fastp:
+  threads: 4
+  memory_mb: 4096
+  n_base_limit: 0
+  average_qual: 20
+  cut_front: true
+  cut_tail: true
+  cut_right: true
+  detect_adapter_for_pe: true
+
+sortmerna:
+  reference: "/home/xiebin/resource/genome/rRNA_SortMeRNA/smr_v4.3/smr_v4.3_default_db.fasta"
+  index_threads: 8
+  index_memory_mb: 12288
+  threads: 8
+  memory_mb: 8192
+
+reference:
+  combined_genome: "../../02_resources/combined_genome.fa"
+  stu_gene_bed: "/home/xiebin/resource/genome/rRNA_SortMeRNA/SolTub_3.0/Stu_v3.gene.bed"
+  stu_gff3: "/home/xiebin/resource/genome/rRNA_SortMeRNA/SolTub_3.0/Solanum_tuberosum.SolTub_3.0.59.gff3"
+  pi_gtf: "/home/xiebin/resource/genome/rRNA_SortMeRNA/T30-4/Phytophthora_infestans.ASM14294v1.63.gtf"
+  stu_nuclear_regex: "^Stu_"
+  stu_organelle_regex: "^Stu_(mt_|cp$)"
+  pi_regex: "^Pinf_"
+
+strand_analysis:
+  sample_pairs: 200000
+  random_seed: 17
+  threads: 6
+  hisat2_threads: 2
+  samtools_view_threads: 1
+  samtools_sort_threads: 1
+  memory_mb: 4096
+  max_alignments: 20
+  stranded_threshold: 0.90
+  unstranded_threshold: 0.60
+
+hisat2:
+  index_threads: 16
+  index_memory_mb: 24576
+  threads: 18
+  align_threads: 10
+  samtools_view_threads: 2
+  samtools_sort_threads: 4
+  samtools_post_threads: 4
+  memory_mb: 24576
+  max_alignments: 5
+  max_intron_length: 20000
+  minimum_mapq: 30
+
+quantification:
+  stu_bam_dir: "/mnt/d/01workdir_early/potato_pi_bulk_rnaseq/stu_nuclear_bam"
+  samtools_threads: 4
+  samtools_memory_mb: 4096
+  stringtie_threads: 6
+  stringtie_memory_mb: 8192
+  featurecounts_threads: 6
+  featurecounts_memory_mb: 4096
+
+sample_relationship:
+  # deseq2 / edgeR / both; results are isolated in method-specific folders.
+  method: "both"
+  min_total_count: 10
+  top_variable_genes: 500
+  correlation_method: "pearson"
+  clustering_method: "average"
+  memory_mb: 8192
+
+multiqc:
+  threads: 1
+  memory_mb: 4096
+  filename: "multiQC"

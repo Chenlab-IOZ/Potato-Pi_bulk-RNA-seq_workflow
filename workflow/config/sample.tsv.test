@@ -1,0 +1,10 @@
+sample	condition	replicate	batch	r1	r2
+Mock_00h_1	Mock_00h	1	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_1_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_1_R2.fastq.gz
+Mock_00h_2	Mock_00h	2	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_2_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_2_R2.fastq.gz
+Mock_00h_3	Mock_00h	3	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_3_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Mock_00h_3_R2.fastq.gz
+Pi_04h_1	Pi_04h	1	B2	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_1_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_1_R2.fastq.gz
+Pi_04h_2	Pi_04h	2	B2	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_2_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_2_R2.fastq.gz
+Pi_04h_3	Pi_04h	3	B2	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_3_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_04h_3_R2.fastq.gz
+Pi_72h_1	Pi_72h	1	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_1_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_1_R2.fastq.gz
+Pi_72h_2	Pi_72h	2	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_2_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_2_R2.fastq.gz
+Pi_72h_3	Pi_72h	3	B1	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_3_R1.fastq.gz	/home/xiebin/project/02_potato-pi_bulkRNA-seq_scienfic_data/01_data/03_test_1pct/Pi_72h_3_R2.fastq.gz
