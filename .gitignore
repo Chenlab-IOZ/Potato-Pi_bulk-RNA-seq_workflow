@@ -3,3 +3,7 @@ __pycache__/
 .ipynb_checkpoints/
 .snakemake/
 results/
+
+# Private manuscript files
+/manuscript/
+/masundercript/
