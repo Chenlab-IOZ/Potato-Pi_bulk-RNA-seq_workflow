@@ -1,6 +1,6 @@
 # Paths are resolved relative to the workflow directory.
 samples: "config/sample.tsv"
-output_dir: "../../04_results"
+output_dir: "../results"
 
 fastp:
   threads: 4
@@ -64,7 +64,7 @@ quantification:
 
 sample_relationship:
   # deseq2 / edgeR / both; results are isolated in method-specific folders.
-  method: "both"
+  method: "edgeR"
   min_total_count: 10
   top_variable_genes: 500
   correlation_method: "pearson"

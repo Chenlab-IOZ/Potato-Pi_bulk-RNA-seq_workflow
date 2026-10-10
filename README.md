@@ -6,13 +6,22 @@ The workflow performs read preprocessing, rRNA filtering, strandedness inference
 
 ## Contents
 
-- [Workflow overview](#workflow-overview)
-- [Workflow structure](#workflow-structure)
-- [Workflow inputs](#workflow-inputs)
-- [Processing steps](#processing-steps)
-- [Normalization and sample relationships](#normalization-and-sample-relationships)
-- [Run the workflow](#run-the-workflow)
-- [Main workflow outputs](#main-workflow-outputs)
+- [Potato-*Phytophthora infestans* bulk RNA-seq workflow](#potato-phytophthora-infestans-bulk-rna-seq-workflow)
+  - [Contents](#contents)
+  - [Workflow overview](#workflow-overview)
+  - [Workflow structure](#workflow-structure)
+  - [Workflow inputs](#workflow-inputs)
+    - [Sample table](#sample-table)
+    - [Configuration](#configuration)
+    - [References](#references)
+  - [Processing steps](#processing-steps)
+  - [Normalization and sample relationships](#normalization-and-sample-relationships)
+  - [Run the workflow](#run-the-workflow)
+  - [Main workflow outputs](#main-workflow-outputs)
+    - [`results/01.pre_analysis/`](#results01pre_analysis)
+    - [`results/02.pre_assesment/`](#results02pre_assesment)
+    - [`results/03.expression/`](#results03expression)
+    - [`results/04.sample_relationship/`](#results04sample_relationship)
 
 ## Workflow overview
 
